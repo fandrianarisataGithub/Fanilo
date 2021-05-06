@@ -1,0 +1,3 @@
+pass database : satagroup_etablissement_2021
+user database : satagroup_etablissement
+nom database : satagroup_etablissement

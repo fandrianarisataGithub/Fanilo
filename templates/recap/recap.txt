@@ -1,0 +1,50 @@
+Diagramme de class 
+
+Class User {
+     # email,
+     # password
+     # rôle 
+     # nom
+     # prenom
+     # date de naissance 
+     # nom_etablissement (ambenana rehefa mi-map @ etablissemeent)
+     # étudiant ? prof ? nini (checkbox)
+     # pdp
+}
+
+Class Etudiant extends User {
+    - niveau 
+    
+
+}
+Class Prof extends User{
+    - Matière 
+    
+}
+
+Class Etablissement {
+    nom
+    lieu
+    type (univ, lycée, collège)
+    createur (admin)
+}
+
+Class Publication {
+    titre
+    contenu
+    date_pub
+    image
+    video
+    user_id
+}
+
+Class commentaire {
+    commentateur (user)
+    contenu
+    date_com
+    image
+    video 
+}
+
+
+

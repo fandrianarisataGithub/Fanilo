@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block title %}
+    {% endblock %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700,800" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('front/fonts/icomoon/style.css') }}">
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('front/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('front/css/magnific-popup.css') }}">
+    <link rel="stylesheet" href="{{ asset('front/css/jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ asset('front/css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('front/css/owl.theme.default.min.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('front/css/bootstrap-datepicker.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('front/fonts/flaticon/font/flaticon.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('front/css/aos.css') }}">
+    <link rel="stylesheet" href="{{ asset('front/css/rangeslider.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('front/css/style.css') }}">
+  </head>
+  <body>
+  <div class="site-wrap">
+
+    <div class="site-mobile-menu">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close mt-3">
+          <span class="icon-close2 js-menu-toggle"></span>
+        </div>
+      </div>
+      <div class="site-mobile-menu-body"></div>
+    </div>
+    <header class="site-navbar container py-0 shrink" role="banner">
+
+      <!-- <div class="container"> -->
+        <div class="row align-items-center">
+          
+          <div class="col-6 col-xl-2">
+            <h1 class="mb-0 site-logo"><a href="index.html" class="text-white mb-0">Nom de l'etab</a></h1>
+          </div>
+          <div class="col-12 col-md-10 d-none d-xl-block">
+            <nav class="site-navigation position-relative text-right" role="navigation">
+
+              <ul class="site-menu js-clone-nav mr-auto d-none d-lg-block">
+                <li class="active"><a href="{{ path('home') }}">Accueil</a></li>
+                <li><a href="{{ path('articles') }}">Articles</a></li>
+                <li>
+                  <a href="#">Filières</a>
+                  {# <ul class="dropdown">
+                    <li><a href="#">The Company</a></li>
+                    <li><a href="#">The Leadership</a></li>
+                    <li><a href="#">Philosophy</a></li>
+                    <li><a href="#">Careers</a></li>
+                  </ul> #}
+                </li>
+                <li><a href="#">Responsables</a></li>
+                <li class="mr-5"><a href="#">S'inscrire au newsletter</a></li>
+                <li class="ml-xl-3 login">
+                  {% if app.user %}
+                      <a href="{{ path('app_logout') }}">
+                        <span class="border-left pl-xl-4"></span>Se déconnecter
+                      </a>
+                    {% else %}
+                      <a href="{{ path('app_login') }}">
+                        <span class="border-left pl-xl-4"></span>Se connecter
+                      </a>
+                  {% endif %}
+                  
+                </li>
+                {# <li><a href="register.html" class="cta"><span class="bg-primary text-white rounded">Créer un compte</span></a></li> #}
+              </ul>
+            </nav>
+          </div>
+
+
+          <div class="d-inline-block d-xl-none ml-auto py-3 col-6 text-right" style="position: relative; top: 3px;">
+            <a href="#" class="site-menu-toggle js-menu-toggle text-white"><span class="icon-menu h3"></span></a>
+          </div>
+
+        </div>
+      <!-- </div> -->
+    </header>
+
+    
+    {% block body %}
+      
+    {% endblock %}
+    
+    <footer class="site-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-9">
+            <div class="row">
+              <div class="col-md-6">
+                <h2 class="footer-heading mb-4">A propos</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Provident rerum unde possimus molestias dolorem fuga, illo quis fugiat!</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <form action="#" method="post">
+              <div class="input-group mb-3">
+                <input type="text" class="form-control border-secondary text-white bg-transparent" placeholder="Search products..." aria-label="Enter Email" aria-describedby="button-addon2">
+                <div class="input-group-append">
+                  <button class="btn btn-primary text-white" type="button" id="button-addon2">Search</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <script src="{{ asset('front/js/jquery-3.3.1.min.js') }}"></script>
+  <script src="{{ asset('front/js/jquery-migrate-3.0.1.min.js') }}"></script>
+  <script src="{{ asset('front/js/jquery-ui.js') }}"></script>
+  <script src="{{ asset('front/js/popper.min.js') }}"></script>
+  <script src="{{ asset('front/js/bootstrap.min.js') }}"></script>
+  <script src="{{ asset('front/js/owl.carousel.min.js') }}"></script>
+  <script src="{{ asset('front/js/jquery.stellar.min.js') }}"></script>
+  <script src="{{ asset('front/js/jquery.countdown.min.js') }}"></script>
+  <script src="{{ asset('front/js/jquery.magnific-popup.min.js') }}"></script>
+  <script src="{{ asset('front/js/bootstrap-datepicker.min.js') }}"></script>
+  <script src="{{ asset('front/js/aos.js') }}"></script>
+  <script src="{{ asset('front/js/rangeslider.min.js') }}"></script>
+  <script src="{{ asset('front/js/main.js') }}"></script>
+  <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
+  {% block javascripts %}
+    
+  {% endblock %}
+  </body>
+</html>
