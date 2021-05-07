@@ -59,12 +59,23 @@
                   </ul> #}
                 </li>
                 <li><a href="#">Responsables</a></li>
-                <li class="mr-5"><a href="#">S'inscrire au newsletter</a></li>
                 <li class="ml-xl-3 login">
                   {% if app.user %}
-                      <a href="{{ path('app_logout') }}">
-                        <span class="border-left pl-xl-4"></span>Se déconnecter
-                      </a>
+                      <li class="has-children">
+                        <span class="border-left pl-xl-4"></span>
+                        <a href="#"><span class="fa fa-ellipsis-v"></span></a>
+                        <ul class="dropdown">
+                          <li>
+                            <a href="{{ path('app_logout') }}"><span><img width="25px" src="{{ asset('front/images/logout.png') }}" alt="icone logout"></span> Se déconnecter</a>
+                          </li>
+                          <li>
+                            <a href="#">Vers le site</a>
+                          </li>
+                          <li>
+                            <a href="#"><span class=" fa fa-dashboard "></span> Dashboard</a>
+                          </li>
+                        </ul>
+                      </li>
                     {% else %}
                       <a href="{{ path('app_login') }}">
                         <span class="border-left pl-xl-4"></span>Se connecter
