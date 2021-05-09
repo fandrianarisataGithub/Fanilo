@@ -24,6 +24,8 @@ class DefaultController extends AbstractController
      */
     public function first():Response
     {
+        $user = $this->getUser();
+        //dd($user);
         return $this->render("front/home.html.twig");  
     }
     /**
@@ -42,13 +44,7 @@ class DefaultController extends AbstractController
         return $this->render("front/show_article.html.twig");
     }
 
-    /**
-     * @Route("/chat", name="chat")
-     */
-    public function chat():Response
-    {   
-        return $this->render("chat/index.html.twig");
-    }
+    
 
     /**
      * @Route("/user_register", name="user_register")

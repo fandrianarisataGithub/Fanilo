@@ -2,7 +2,42 @@
 {% block title %}
 	<title>Articles</title>
 {% endblock %}
+{% block stylesheets %}
+ <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+	<style>
+		input[type="file"] {
+			display: block;
+			font-size:12px;
+		}
+		.imageThumb {
+			border: 2px solid;
+			padding: 1px;
+			cursor: pointer;
+			width: 200px;
+			height: 200px !important;
+		}
+		.pip {
+			display: inline-block;
+			margin: 10px 10px 0 0;
+		}
+		.remove {
+			display: block;
+			background: #444;
+			border: 1px solid black;
+			color: white;
+			text-align: center;
+			cursor: pointer;
+			padding : 5px;
+			font-size : 12px;
+		}
+		.remove:hover {
+			background: white;
+			color: black;
+		}
+	</style>
+{% endblock %}
 {% block body %}
+
 <div class="site-blocks-cover overlay" style="background-image: url({{ asset('front/images/hero_2.jpg') }});" data-aos="fade" data-stellar-background-ratio="0.5">
 	<div class="container">
 		<div class="row align-items-center justify-content-center text-center">
@@ -31,14 +66,24 @@
 				<input type="text" placeholder="Titre de l'article" name="" id="titre" class="form-control">
 			</div>
 			<div class="form-group">
-				<label>Inserer un image</label>
-				<div id="div_image_article" style="background-image:url({{ asset('front/images/empty-image.jpg') }})">
-					<input type="file" id="input_image_article">
-					<div>
-						<span class="fa fa-camera "></span>
-					</div>
+				<label>Inserer un ou plusieurs image</label>
+				{# image #}
+				<div class="field" align="left">
+					<input type="file" id="files" name="files[]" multiple/>
 				</div>
+				{# /image #}
+
 			</div>
+			<div class="form-group">
+				<label>Inserer un ou plusieurs fichiers </label>
+				{# image #}
+				<div class="field" align="left">
+					<input type="file" id="files_files" name="files[]" multiple/>
+				</div>
+				{# /image #}
+
+			</div>
+
 			<div class="form-group">
 				<label>Inserer une video</label>
 				<div id="div_video_article">
@@ -127,6 +172,7 @@
 			<div class="row align-items-center">
 				<div class="col-md-6">
 					<h2>Newsletter</h2>
+					<div id="test"></div>
 					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
 				</div>
 				<div class="col-md-6">
@@ -141,37 +187,111 @@
 
 {% endblock %}
 {% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
 	<script>
 		// Replace the <textarea id="editor1"> with a CKEditor 4
-	// instance, using default configuration.
-	CKEDITOR.replace('contenu');
-	
-	// video traitement
+		// instance, using default configuration.
+		$(document).ready(function() {
+            $('#contenu').summernote({
+                callbacks: {
+					onImageUpload: function(files) {
+						for(let i=0; i < files.length; i++) {
+							$.upload(files[i]);
+						}
+					}
+				},
+				height: 500,
+            });
 
-	const input = document.getElementById('input_video_article');
-	const video = document.getElementById('video');
-	const videoSource = document.createElement('source');
+			// send the file
 
-	input.addEventListener('change', function() {
-	const files = this.files || [];
+			$.upload = function (file) {
+				let out = new FormData();
+				out.append('file', file, file.name);
 
-	if (!files.length) return;
-	
-	const reader = new FileReader();
+				$.ajax({
+					method: 'POST',
+					url: '{{ path("summernote_add_image") }}',
+					contentType: false,
+					cache: false,
+					processData: false,
+					data: out,
+					success: function (img) {
+						if(image != "error"){
+							$('#contenu').summernote('insertImage', img);
+						}
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						console.error(textStatus + " " + errorThrown);
+					}
+				});
+			};
 
-	reader.onload = function (e) {
-		videoSource.setAttribute('src', e.target.result);
-		video.appendChild(videoSource);
-		video.load();
-		video.play();
-	};
+        });
+		
+		// video traitement
+
+		const input = document.getElementById('input_video_article');
+		const video = document.getElementById('video');
+		const videoSource = document.createElement('source');
+
+		input.addEventListener('change', function() {
+			const files = this.files || [];
+
+			if (!files.length) return;
+			
+			const reader = new FileReader();
+
+			reader.onload = function (e) {
+				videoSource.setAttribute('src', e.target.result);
+				video.appendChild(videoSource);
+				video.load();
+				video.play();
+			};
 	
-	reader.onprogress = function (e) {
-		console.log('progress: ', Math.round((e.loaded * 100) / e.total));
-	};
-	
-	reader.readAsDataURL(files[0]);
-	});
+			reader.onprogress = function (e) {
+				console.log('progress: ', Math.round((e.loaded * 100) / e.total));
+			};
+			
+			reader.readAsDataURL(files[0]);
+		});
+
+		$(document).ready(function() {
+			if (window.File && window.FileList && window.FileReader) {
+				$("#files").on("change", function(e) {
+				var files = e.target.files,
+					filesLength = files.length;
+				for (var i = 0; i < filesLength; i++) {
+					var f = files[i]
+					var fileReader = new FileReader();
+					fileReader.onload = (function(e) {
+					var file = e.target;
+					$("<span class=\"pip\">" +
+						"<img class=\"imageThumb\" src=\"" + e.target.result + "\" title=\"" + file.name + "\"/>" +
+						"<br/><span class=\"remove\">Effacer</span>" +
+						"</span>").insertAfter("#files");
+					$(".remove").click(function(){
+						$(this).parent(".pip").remove();
+					});
+					
+					// Old code here
+					/*$("<img></img>", {
+						class: "imageThumb",
+						src: e.target.result,
+						title: file.name + " | Click to remove"
+					}).insertAfter("#files").click(function(){$(this).remove();});*/
+					
+					});
+					fileReader.readAsDataURL(f);
+				}
+				console.log(files);
+				});
+			} else {
+				alert("Your browser doesn't support to File API")
+			}
+			});
 
 	</script>
 
