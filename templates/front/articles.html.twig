@@ -66,19 +66,19 @@
 				<input type="text" placeholder="Titre de l'article" name="" id="titre" class="form-control">
 			</div>
 			<div class="form-group">
-				<label>Inserer un ou plusieurs image</label>
+				<label>Inserer un ou plusieurs images</label>
 				{# image #}
 				<div class="field" align="left">
-					<input type="file" id="files" name="files[]" multiple/>
+					<input type="file" id="filesImages" name="filesImages[]" multiple/>
 				</div>
 				{# /image #}
 
 			</div>
 			<div class="form-group">
-				<label>Inserer un ou plusieurs fichiers </label>
+				<label>Inserer un ou plusieurs fichiers (*.pdf, ...)</label>
 				{# image #}
 				<div class="field" align="left">
-					<input type="file" id="files_files" name="files[]" multiple/>
+					<input type="file" id="filesFiles" name="filesFiles[]" multiple/>
 				</div>
 				{# /image #}
 
@@ -202,6 +202,17 @@
 						}
 					}
 				},
+				toolbar: [
+					[ 'style', [ 'style' ] ],
+					[ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
+					[ 'fontname', [ 'fontname' ] ],
+					[ 'fontsize', [ 'fontsize' ] ],
+					[ 'color', [ 'color' ] ],
+					[ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
+					[ 'table', [ 'table' ] ],
+					[ 'insert', [ 'link'] ],
+					[ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview', 'help' ] ]
+				],
 				height: 500,
             });
 
@@ -286,12 +297,45 @@
 					});
 					fileReader.readAsDataURL(f);
 				}
-				console.log(files);
+					console.log(files);
 				});
 			} else {
 				alert("Your browser doesn't support to File API")
 			}
-			});
+
+			$("#add_article").on("click", function(ev){
+				ev.preventDefault();
+				
+				var formData = new FormData();
+
+				var files_imagesLength = document.getElementById('filesImages').files.length;
+				var files_filesLength = document.getElementById('filesFiles').files.length;
+				//console.log(files_imagesLength);
+				for(var i=0;i<files_imagesLength;i++){
+					formData.append("file_images[]", document.getElementById('filesImages').files[i]);
+				}
+
+				for(var i=0;i<files_filesLength;i++){
+					formData.append("file_files[]", document.getElementById('filesFiles').files[i]);
+				}
+
+
+
+				$.ajax({
+					url: '{{ path("add_article") }}',
+					type: 'POST',
+					data: formData,
+					contentType: false,
+					cache: false,
+					processData: false,
+					success: function (html) {
+						$("#test").html(html);
+					}
+				});
+			})
+
+
+		});
 
 	</script>
 
