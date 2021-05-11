@@ -28,21 +28,6 @@ class DefaultController extends AbstractController
         //dd($user);
         return $this->render("front/home.html.twig");  
     }
-    /**
-     * @Route("/articles", name="articles")
-     */
-    public function articles(): Response
-    {
-        return $this->render("front/articles.html.twig");
-    }
-
-    /**
-     * @Route("/article/{id}", name="article")
-     */
-    public function article(): Response
-    {
-        return $this->render("front/show_article.html.twig");
-    }
 
     
 

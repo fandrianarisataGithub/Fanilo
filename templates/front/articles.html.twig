@@ -4,37 +4,7 @@
 {% endblock %}
 {% block stylesheets %}
  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-	<style>
-		input[type="file"] {
-			display: block;
-			font-size:12px;
-		}
-		.imageThumb {
-			border: 2px solid;
-			padding: 1px;
-			cursor: pointer;
-			width: 200px;
-			height: 200px !important;
-		}
-		.pip {
-			display: inline-block;
-			margin: 10px 10px 0 0;
-		}
-		.remove {
-			display: block;
-			background: #444;
-			border: 1px solid black;
-			color: white;
-			text-align: center;
-			cursor: pointer;
-			padding : 5px;
-			font-size : 12px;
-		}
-		.remove:hover {
-			background: white;
-			color: black;
-		}
-	</style>
+	<link rel="stylesheet" href="{{ asset('front/css/article.css') }}">
 {% endblock %}
 {% block body %}
 
@@ -60,7 +30,7 @@
 				<h2 class="font-weight-light text-primary">Ajouter un article</h2>
 			</div>
 		</div>
-		<form action="">
+		<form action="" id="form_article">
 			<div class="form-group">
 				<label for="titre">Titre de l'article</label>
 				<input type="text" placeholder="Titre de l'article" name="" id="titre" class="form-control">
@@ -96,9 +66,17 @@
 				<textarea placeholder="Contenu de l'article" name="" id="contenu" cols="30" rows="10" class="form-control"></textarea>
 			</div>
 			<div class="form-group">
+				
+				<div id="progress-wrp" class="progress" style = "display:none">
+					<div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div >
+					{# <div class="status">0%</div> #}
+				</div>
+			</div>
+			<div class="form-group">
 				<button id="add_article" class="btn btn-primary">
 					Enregistrer
 				</button>
+				<button class="btn btn-warning" id="btn_reset">Annuler</button>
 			</div>
 		</form>
 
@@ -115,49 +93,48 @@
 			</div>
 		</div>
 		<div class="row mb-3 align-items-stretch">
-			<div class="col-md-6 col-lg-4 mb-4 mb-lg-4">
-				<div class="h-entry">
-					<img src="{{ asset('front/images/img_1.jpg') }}" alt="Image" class="img-fluid rounded">
-					<h2 class="font-size-regular">
-						<a href="#" class="text-black">Many People Selling Online</a>
-					</h2>
-					<div class="meta mb-3">by Mark Spiker<span class="mx-1">&bullet;</span>
-						Jan 18, 2019
-						<span class="mx-1">&bullet;</span>
-						<a href="#">Voir de details</a>
-					</div>
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus eligendi nobis ea maiores sapiente veritatis reprehenderit suscipit quaerat rerum voluptatibus a eius.</p>
-				</div>
-			</div>
-			<div class="col-md-6 col-lg-4 mb-4 mb-lg-4">
-				<div class="h-entry">
-					<img src="{{ asset('front/images/img_1.jpg') }}" alt="Image" class="img-fluid rounded">
-					<h2 class="font-size-regular">
-						<a href="#" class="text-black">Many People Selling Online</a>
-					</h2>
-					<div class="meta mb-3">by Mark Spiker<span class="mx-1">&bullet;</span>
-						Jan 18, 2019
-						<span class="mx-1">&bullet;</span>
-						<a href="#">Voir de details</a>
-					</div>
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus eligendi nobis ea maiores sapiente veritatis reprehenderit suscipit quaerat rerum voluptatibus a eius.</p>
-				</div>
-			</div>
-			<div class="col-md-6 col-lg-4 mb-4 mb-lg-4">
-				<div class="h-entry">
-					<img src="{{ asset('front/images/img_1.jpg') }}" alt="Image" class="img-fluid rounded">
-					<h2 class="font-size-regular">
-						<a href="#" class="text-black">Many People Selling Online</a>
-					</h2>
-					<div class="meta mb-3">by Mark Spiker<span class="mx-1">&bullet;</span>
-						Jan 18, 2019
-						<span class="mx-1">&bullet;</span>
-						<a href="#">Voir de details</a>
-					</div>
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus eligendi nobis ea maiores sapiente veritatis reprehenderit suscipit quaerat rerum voluptatibus a eius.</p>
-				</div>
-			</div>
+			
+			{% for article in articles %}
 
+				{% set file_image = null %}
+				{% set break = false %}
+
+				{% for file in article.files %}
+					{% if file.getTypeFile() == "image" %}
+						{% set file_image = file %}
+						{% set break = true %}
+					{% endif %}
+				{% endfor %}
+				<div class="col-md-6 col-lg-4 mb-4 mb-lg-4">
+					<div class="h-entry">
+						<img src="{{ file_image ? asset('uploads/article/images/' ~ file_image.url) : '' }}"
+						 alt="{{ file_image ? file_image.url : '' }}" class="img-fluid rounded">
+						<h2 class="font-size-regular">
+							<a href="#" class="text-black">{{ article.titre }}</a>
+						</h2>
+						<div class="meta mb-3">by {{ article.user.nom }}<span class="mx-1">&bullet;</span>
+							{{ article.createdAt|date('d-m-Y H:i') }}
+							<span class="mx-1">&bullet;</span>
+							<a href="#">Voir details</a>
+						</div>
+						<p class="p_truncate">{{ article.contenu }}</p>
+					</div>
+				</div>
+			{% endfor %}
+			<div class="col-md-6 col-lg-4 mb-4 mb-lg-4">
+				<div class="h-entry">
+					<img src="{{ asset('front/images/img_1.jpg') }}" alt="Image" class="img-fluid rounded">
+					<h2 class="font-size-regular">
+						<a href="#" class="text-black">Many People Selling Online</a>
+					</h2>
+					<div class="meta mb-3">by Mark Spiker<span class="mx-1">&bullet;</span>
+						Jan 18, 2019
+						<span class="mx-1">&bullet;</span>
+						<a href="#">Voir details</a>
+					</div>
+					<p class="p_truncate">Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus eligendi nobis ea maiores sapiente veritatis reprehenderit suscipit quaerat rerum voluptatibus a eius.</p>
+				</div>
+			</div>
 			<div class="col-12 text-center mt-4">
 				<a href="#" class="btn btn-primary rounded py-2 px-4 text-white">Pagination no eto</a>
 			</div>
@@ -271,45 +248,49 @@
 
 		$(document).ready(function() {
 			if (window.File && window.FileList && window.FileReader) {
-				$("#files").on("change", function(e) {
-				var files = e.target.files,
-					filesLength = files.length;
-				for (var i = 0; i < filesLength; i++) {
-					var f = files[i]
-					var fileReader = new FileReader();
-					fileReader.onload = (function(e) {
-					var file = e.target;
-					$("<span class=\"pip\">" +
-						"<img class=\"imageThumb\" src=\"" + e.target.result + "\" title=\"" + file.name + "\"/>" +
-						"<br/><span class=\"remove\">Effacer</span>" +
-						"</span>").insertAfter("#files");
-					$(".remove").click(function(){
-						$(this).parent(".pip").remove();
-					});
-					
-					// Old code here
-					/*$("<img></img>", {
-						class: "imageThumb",
-						src: e.target.result,
-						title: file.name + " | Click to remove"
-					}).insertAfter("#files").click(function(){$(this).remove();});*/
-					
-					});
-					fileReader.readAsDataURL(f);
-				}
-					console.log(files);
+				$("#filesImages").on("change", function(e) {
+					var files = e.target.files,
+						filesLength = files.length;
+					for (var i = 0; i < filesLength; i++) {
+						var f = files[i]
+						var fileReader = new FileReader();
+						fileReader.onload = (function(e) {
+						var file = e.target;
+						$("<span class=\"pip\">" +
+							"<img class=\"imageThumb\" src=\"" + e.target.result + "\" title=\"" + file.name + "\"/>" +
+							"<br/><span class=\"remove\">Effacer</span>" +
+							"</span>").insertAfter("#filesImages");
+						$(".remove").click(function(){
+							$(this).parent(".pip").remove();
+						});
+						
+						});
+						fileReader.readAsDataURL(f);
+					}
+						console.log(files);
 				});
+
 			} else {
 				alert("Your browser doesn't support to File API")
 			}
-
-			$("#add_article").on("click", function(ev){
+			$("#btn_reset").click(function(ev){
+				ev.preventDefault();
+				$("#form_article")[0].reset();
+			})
+			$("#form_article").on("submit", function(ev){
 				ev.preventDefault();
 				
 				var formData = new FormData();
 
 				var files_imagesLength = document.getElementById('filesImages').files.length;
 				var files_filesLength = document.getElementById('filesFiles').files.length;
+				//input_video_article
+				formData.append("file_video", document.getElementById('input_video_article').files[0]);
+				console.log(document.getElementById('input_video_article').files[0])
+				formData.append("titre", document.getElementById('titre').value);
+				formData.append("contenu", document.getElementById('contenu').value);
+				formData.append("user_id", "{{ app.user ? app.user.id : "" }}");
+
 				//console.log(files_imagesLength);
 				for(var i=0;i<files_imagesLength;i++){
 					formData.append("file_images[]", document.getElementById('filesImages').files[i]);
@@ -319,22 +300,50 @@
 					formData.append("file_files[]", document.getElementById('filesFiles').files[i]);
 				}
 
-
-
 				$.ajax({
-					url: '{{ path("add_article") }}',
+					url : '{{ path("add_article") }}',
 					type: 'POST',
 					data: formData,
 					contentType: false,
 					cache: false,
 					processData: false,
+					beforeSend : function(){
+						$("#progress-wrp").fadeIn();
+						$("#add_article").text("Patienter ...");
+					},
+					xhr: function(){
+						//upload Progress
+						var xhr = $.ajaxSettings.xhr();
+						if (xhr.upload) {
+							xhr.upload.addEventListener('progress', function(event) {
+								var percent = 0;
+								var position = event.loaded || event.position;
+								var total = event.total;
+								if (event.lengthComputable)
+								{
+									percent = Math.ceil(position / total * 100);
+								}
+								//update progressbar
+								$(".progress-bar").css("width", + percent +"%");
+								//$(".status").text(percent +"%");
+							}, true);
+						}
+						return xhr;
+					},
 					success: function (html) {
+						console.log(html);
 						$("#test").html(html);
+					},
+					complete : function(){
+						$("#form_article")[0].reset();
+						$("#progress-wrp").fadeOut();
+						$("#add_article").text("Enregistrer");
 					}
+
 				});
 			})
 
-
+			
 		});
 
 	</script>
