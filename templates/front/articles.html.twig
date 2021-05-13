@@ -5,6 +5,16 @@
 {% block stylesheets %}
  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="{{ asset('front/css/article.css') }}">
+	<style>
+		.new_article{
+			display:none ;
+		}
+		.error_form p{
+			padding-left : 25px;
+			color : #fff;
+			font-size : 13px;
+		}
+	</style>
 {% endblock %}
 {% block body %}
 
@@ -25,12 +35,20 @@
 {# add article #}
 <div class="site-section bg-light">
 	<div class="container">
-		<div class="row justify-content-center mb-5">
+		<div class="row mb-5">
+			<div class="col-md-7">
+				<a href="#" class="btn btn-primary" id="btn_cache_new_article">
+					<span class="fa fa-plus ml-2"></span>
+					<span class="ml-2">Nouveau article</span>
+				</a>
+			</div>
+		</div>
+		<div class="row justify-content-center mb-5 new_article">
 			<div class="col-md-7 text-center border-primary">
 				<h2 class="font-weight-light text-primary">Ajouter un article</h2>
 			</div>
 		</div>
-		<form action="" id="form_article">
+		<form action="" id="form_article" class="new_article">
 			<div class="form-group">
 				<label for="titre">Titre de l'article</label>
 				<input type="text" placeholder="Titre de l'article" name="" id="titre" class="form-control">
@@ -73,6 +91,9 @@
 				</div>
 			</div>
 			<div class="form-group">
+				<div class="error_form bg-danger" style="display:none;">
+					<p></p>
+				</div>
 				<button id="add_article" class="btn btn-primary">
 					Enregistrer
 				</button>
@@ -94,7 +115,7 @@
 		</div>
 		<div class="row mb-3 align-items-stretch">
 			
-			{% for article in articles %}
+			{% for article in pagination %}
 
 				{% set file_image = null %}
 				{% set break = false %}
@@ -115,28 +136,17 @@
 						<div class="meta mb-3">by {{ article.user.nom }}<span class="mx-1">&bullet;</span>
 							{{ article.createdAt|date('d-m-Y H:i') }}
 							<span class="mx-1">&bullet;</span>
-							<a href="#">Voir details</a>
+							<a href="{{ path('article', {'id': article.id }) }}">Voir details</a>
 						</div>
-						<p class="p_truncate">{{ article.contenu }}</p>
+						{% set some_html = article.contenu|raw %}
+						<p class="p_truncate text-truncate">{{ some_html[:150]|striptags ~ ' ...' }}</p>
 					</div>
 				</div>
 			{% endfor %}
-			<div class="col-md-6 col-lg-4 mb-4 mb-lg-4">
-				<div class="h-entry">
-					<img src="{{ asset('front/images/img_1.jpg') }}" alt="Image" class="img-fluid rounded">
-					<h2 class="font-size-regular">
-						<a href="#" class="text-black">Many People Selling Online</a>
-					</h2>
-					<div class="meta mb-3">by Mark Spiker<span class="mx-1">&bullet;</span>
-						Jan 18, 2019
-						<span class="mx-1">&bullet;</span>
-						<a href="#">Voir details</a>
-					</div>
-					<p class="p_truncate">Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus eligendi nobis ea maiores sapiente veritatis reprehenderit suscipit quaerat rerum voluptatibus a eius.</p>
-				</div>
-			</div>
 			<div class="col-12 text-center mt-4">
-				<a href="#" class="btn btn-primary rounded py-2 px-4 text-white">Pagination no eto</a>
+				<div class="navigation">
+					{{ knp_pagination_render(pagination) }}
+				</div>
 			</div>
 		</div>
 	</div>
@@ -171,7 +181,17 @@
 		// Replace the <textarea id="editor1"> with a CKEditor 4
 		// instance, using default configuration.
 		$(document).ready(function() {
+
+			$('#btn_cache_new_article').click(function(params) {
+				params.preventDefault();
+				$(".new_article").fadeIn();
+				$(".justify-content-center").css("display", "flex");
+			})
+
             $('#contenu').summernote({
+				onChange : function(){
+					$(".error_form").fadeOut();
+				},
                 callbacks: {
 					onImageUpload: function(files) {
 						for(let i=0; i < files.length; i++) {
@@ -179,6 +199,7 @@
 						}
 					}
 				},
+				
 				toolbar: [
 					[ 'style', [ 'style' ] ],
 					[ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
@@ -276,71 +297,88 @@
 			$("#btn_reset").click(function(ev){
 				ev.preventDefault();
 				$("#form_article")[0].reset();
+				$(".new_article").fadeOut();
 			})
+
+			$("#titre, #contenu").focus(function(){
+				$(".error_form").fadeOut();
+			})
+
 			$("#form_article").on("submit", function(ev){
 				ev.preventDefault();
 				
-				var formData = new FormData();
+				var titre = $("#titre").val();
+				var contenu_is_empty = $("#contenu").summernote("isEmpty");
+				alert(contenu_is_empty)
+				if(titre == "" && contenu_is_empty == true){
+					$(".error_form p").text("Veuillez renseigner le champ titre et contenu");
+					$(".error_form").fadeIn();
+				}else{
 
-				var files_imagesLength = document.getElementById('filesImages').files.length;
-				var files_filesLength = document.getElementById('filesFiles').files.length;
-				//input_video_article
-				formData.append("file_video", document.getElementById('input_video_article').files[0]);
-				console.log(document.getElementById('input_video_article').files[0])
-				formData.append("titre", document.getElementById('titre').value);
-				formData.append("contenu", document.getElementById('contenu').value);
-				formData.append("user_id", "{{ app.user ? app.user.id : "" }}");
+					var formData = new FormData();
 
-				//console.log(files_imagesLength);
-				for(var i=0;i<files_imagesLength;i++){
-					formData.append("file_images[]", document.getElementById('filesImages').files[i]);
-				}
+					var files_imagesLength = document.getElementById('filesImages').files.length;
+					var files_filesLength = document.getElementById('filesFiles').files.length;
+					//input_video_article
+					formData.append("file_video", document.getElementById('input_video_article').files[0]);
+					console.log(document.getElementById('input_video_article').files[0])
+					formData.append("titre", document.getElementById('titre').value);
+					formData.append("contenu", document.getElementById('contenu').value);
+					formData.append("user_id", "{{ app.user ? app.user.id : "" }}");
 
-				for(var i=0;i<files_filesLength;i++){
-					formData.append("file_files[]", document.getElementById('filesFiles').files[i]);
-				}
-
-				$.ajax({
-					url : '{{ path("add_article") }}',
-					type: 'POST',
-					data: formData,
-					contentType: false,
-					cache: false,
-					processData: false,
-					beforeSend : function(){
-						$("#progress-wrp").fadeIn();
-						$("#add_article").text("Patienter ...");
-					},
-					xhr: function(){
-						//upload Progress
-						var xhr = $.ajaxSettings.xhr();
-						if (xhr.upload) {
-							xhr.upload.addEventListener('progress', function(event) {
-								var percent = 0;
-								var position = event.loaded || event.position;
-								var total = event.total;
-								if (event.lengthComputable)
-								{
-									percent = Math.ceil(position / total * 100);
-								}
-								//update progressbar
-								$(".progress-bar").css("width", + percent +"%");
-								//$(".status").text(percent +"%");
-							}, true);
-						}
-						return xhr;
-					},
-					success: function (html) {
-						console.log(html);
-						$("#test").html(html);
-					},
-					complete : function(){
-						$("#form_article")[0].reset();
-						$("#progress-wrp").fadeOut();
-						$("#add_article").text("Enregistrer");
+					//console.log(files_imagesLength);
+					for(var i=0;i<files_imagesLength;i++){
+						formData.append("file_images[]", document.getElementById('filesImages').files[i]);
 					}
 
-				});
+					for(var i=0;i<files_filesLength;i++){
+						formData.append("file_files[]", document.getElementById('filesFiles').files[i]);
+					}
+
+					$.ajax({
+						url : '{{ path("add_article") }}',
+						type: 'POST',
+						data: formData,
+						contentType: false,
+						cache: false,
+						processData: false,
+						beforeSend : function(){
+							$("#progress-wrp").fadeIn();
+							$("#add_article").text("Patienter ...");
+						},
+						xhr: function(){
+							//upload Progress
+							var xhr = $.ajaxSettings.xhr();
+							if (xhr.upload) {
+								xhr.upload.addEventListener('progress', function(event) {
+									var percent = 0;
+									var position = event.loaded || event.position;
+									var total = event.total;
+									if (event.lengthComputable)
+									{
+										percent = Math.ceil(position / total * 100);
+									}
+									//update progressbar
+									$(".progress-bar").css("width", + percent +"%");
+									//$(".status").text(percent +"%");
+								}, true);
+							}
+							return xhr;
+						},
+						success: function (html) {
+							console.log(html);
+							//$("#test").html(html);
+						},
+						complete : function(){
+							$("#form_article")[0].reset();
+							$('#contenu').summernote('code', '<p><br></p>');
+							$("#progress-wrp").fadeOut();
+							$("#add_article").text("Enregistrer");
+							$(".new_article").fadeOut();
+						}
+
+					});
+				}
 			})
 
 			

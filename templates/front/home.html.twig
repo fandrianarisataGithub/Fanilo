@@ -2,6 +2,9 @@
 {% block title %}
 	<title>Accueil</title>
 {% endblock %}
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('front/css/article.css') }}">
+{% endblock %}
 {% block body %}
 <div class="site-blocks-cover overlay" style="background-image: url({{ asset('front/images/hero_2.jpg') }});" data-aos="fade" data-stellar-background-ratio="0.5">
 	<div class="container">
@@ -29,48 +32,36 @@
 			</div>
 		</div>
 		<div class="row mb-3 align-items-stretch">
-			<div class="col-md-6 col-lg-4 mb-4 mb-lg-4">
-				<div class="h-entry">
-					<img src="{{ asset('front/images/img_1.jpg') }}" alt="Image" class="img-fluid rounded">
-					<h2 class="font-size-regular">
-						<a href="#" class="text-black">Many People Selling Online</a>
-					</h2>
-					<div class="meta mb-3">by Mark Spiker<span class="mx-1">&bullet;</span>
-						Jan 18, 2019
-						<span class="mx-1">&bullet;</span>
-						<a href="#">News</a>
+			
+			{% for article in articles %}
+
+				{% set file_image = null %}
+				{% set break = false %}
+
+				{% for file in article.files %}
+					{% if file.getTypeFile() == "image" %}
+						{% set file_image = file %}
+						{% set break = true %}
+					{% endif %}
+				{% endfor %}
+				<div class="col-md-6 col-lg-4 mb-4 mb-lg-4">
+					<div class="h-entry">
+						<img src="{{ file_image ? asset('uploads/article/images/' ~ file_image.url) : '' }}" alt="{{ file_image ? file_image.url : '' }}" class="img-fluid rounded">
+						<h2 class="font-size-regular">
+							<a href="#" class="text-black">{{ article.titre }}</a>
+						</h2>
+						<div class="meta mb-3">by
+							{{ article.user.nom }}<span class="mx-1">&bullet;</span>
+							{{ article.createdAt|date('d-m-Y H:i') }}
+							<span class="mx-1">&bullet;</span>
+							<a href="{{ path('article', {'id': article.id }) }}">Voir details</a>
+						</div>
+						{% set some_html = article.contenu|raw %}
+						<p class="p_truncate text-truncate">{{ some_html[:150]|striptags ~ ' ...' }}</p>
 					</div>
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus eligendi nobis ea maiores sapiente veritatis reprehenderit suscipit quaerat rerum voluptatibus a eius.</p>
 				</div>
-			</div>
-			<div class="col-md-6 col-lg-4 mb-4 mb-lg-4">
-				<div class="h-entry">
-					<img src="{{ asset('front/images/img_1.jpg') }}" alt="Image" class="img-fluid rounded">
-					<h2 class="font-size-regular">
-						<a href="#" class="text-black">Many People Selling Online</a>
-					</h2>
-					<div class="meta mb-3">by Mark Spiker<span class="mx-1">&bullet;</span>
-						Jan 18, 2019
-						<span class="mx-1">&bullet;</span>
-						<a href="#">News</a>
-					</div>
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus eligendi nobis ea maiores sapiente veritatis reprehenderit suscipit quaerat rerum voluptatibus a eius.</p>
-				</div>
-			</div>
-			<div class="col-md-6 col-lg-4 mb-4 mb-lg-4">
-				<div class="h-entry">
-					<img src="{{ asset('front/images/img_1.jpg') }}" alt="Image" class="img-fluid rounded">
-					<h2 class="font-size-regular">
-						<a href="#" class="text-black">Many People Selling Online</a>
-					</h2>
-					<div class="meta mb-3">by Mark Spiker<span class="mx-1">&bullet;</span>
-						Jan 18, 2019
-						<span class="mx-1">&bullet;</span>
-						<a href="#">News</a>
-					</div>
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus eligendi nobis ea maiores sapiente veritatis reprehenderit suscipit quaerat rerum voluptatibus a eius.</p>
-				</div>
-			</div>
+			{% endfor %}
+
 
 			<div class="col-12 text-center mt-4">
 				<a href="#" class="btn btn-primary rounded py-2 px-4 text-white">View All Posts</a>
@@ -100,119 +91,7 @@
 						<span class="number">1,921</span>
 					</a>
 				</div>
-
-				<div class="col-sm-6 col-md-4 mb-4 mb-lg-0 col-lg-2">
-					<a href="#" class="popular-category h-100">
-						<span class="icon">
-							<span class="flaticon-open-book"></span>
-						</span>
-						<span class="caption mb-2 d-block">Furniture</span>
-						<span class="number">2,339</span>
-					</a>
-				</div>
-
-				<div class="col-sm-6 col-md-4 mb-4 mb-lg-0 col-lg-2">
-					<a href="#" class="popular-category h-100">
-						<span class="icon">
-							<span class="flaticon-open-book"></span>
-						</span>
-						<span class="caption mb-2 d-block">Real Estate</span>
-						<span class="number">4,398</span>
-					</a>
-				</div>
-				<div class="col-sm-6 col-md-4 mb-4 mb-lg-0 col-lg-2">
-					<a href="#" class="popular-category h-100">
-						<span class="icon">
-							<span class="flaticon-open-book"></span>
-						</span>
-						<span class="caption mb-2 d-block">Books &amp; Magazines</span>
-						<span class="number">3,298</span>
-					</a>
-				</div>
-
-				<div class="col-sm-6 col-md-4 mb-4 mb-lg-0 col-lg-2">
-					<a href="#" class="popular-category h-100">
-						<span class="icon">
-							<span class="flaticon-open-book"></span>
-						</span>
-						<span class="caption mb-2 d-block">Electronics</span>
-						<span class="number">`2,932</span>
-					</a>
-				</div>
-
-				<div class="col-sm-6 col-md-4 mb-4 mb-lg-0 col-lg-2">
-					<a href="#" class="popular-category h-100">
-						<span class="icon">
-							<span class="flaticon-open-book"></span>
-						</span>
-						<span class="caption mb-2 d-block">Other</span>
-						<span class="number">183</span>
-					</a>
-				</div>
 			</div>
-
-			{# line hafa #}
-			<div class="row align-items-stretch no-gutters">
-				<div class="col-sm-6 col-md-4 mb-4 mb-lg-0 col-lg-2">
-					<a href="#" class="popular-category h-100">
-						<span class="icon">
-							<span class="flaticon-open-book"></span>
-						</span>
-						<span class="caption mb-2 d-block">Cars &amp; Vehicles</span>
-						<span class="number">1,921</span>
-					</a>
-				</div>
-
-				<div class="col-sm-6 col-md-4 mb-4 mb-lg-0 col-lg-2">
-					<a href="#" class="popular-category h-100">
-						<span class="icon">
-							<span class="flaticon-open-book"></span>
-						</span>
-						<span class="caption mb-2 d-block">Furniture</span>
-						<span class="number">2,339</span>
-					</a>
-				</div>
-
-				<div class="col-sm-6 col-md-4 mb-4 mb-lg-0 col-lg-2">
-					<a href="#" class="popular-category h-100">
-						<span class="icon">
-							<span class="flaticon-open-book"></span>
-						</span>
-						<span class="caption mb-2 d-block">Real Estate</span>
-						<span class="number">4,398</span>
-					</a>
-				</div>
-				<div class="col-sm-6 col-md-4 mb-4 mb-lg-0 col-lg-2">
-					<a href="#" class="popular-category h-100">
-						<span class="icon">
-							<span class="flaticon-open-book"></span>
-						</span>
-						<span class="caption mb-2 d-block">Books &amp; Magazines</span>
-						<span class="number">3,298</span>
-					</a>
-				</div>
-
-				<div class="col-sm-6 col-md-4 mb-4 mb-lg-0 col-lg-2">
-					<a href="#" class="popular-category h-100">
-						<span class="icon">
-							<span class="flaticon-open-book"></span>
-						</span>
-						<span class="caption mb-2 d-block">Electronics</span>
-						<span class="number">`2,932</span>
-					</a>
-				</div>
-
-				<div class="col-sm-6 col-md-4 mb-4 mb-lg-0 col-lg-2">
-					<a href="#" class="popular-category h-100">
-						<span class="icon">
-							<span class="flaticon-open-book"></span>
-						</span>
-						<span class="caption mb-2 d-block">Other</span>
-						<span class="number">183</span>
-					</a>
-				</div>
-			</div>
-			{# fin line #}
 		</div>
 	</div>
 

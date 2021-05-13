@@ -18,6 +18,18 @@ class EtablissementRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Etablissement::class);
     }
+    
+    /**
+     * @return Etablissement[] Returns an array of Etablissement objects
+     */
+    public function findSomeEtab()
+    {
+        return $this->createQueryBuilder('e')
+            ->orderBy('e.id', 'DESC')
+            ->setMaxResults(6)
+            ->getQuery()
+            ->getResult();
+    }
 
     // /**
     //  * @return Etablissement[] Returns an array of Etablissement objects

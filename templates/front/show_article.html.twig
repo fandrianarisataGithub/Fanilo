@@ -2,6 +2,10 @@
 {% block title %}
 	<title>Article</title>
 {% endblock %}
+{% block stylesheets %}
+ <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="{{ asset('front/css/article.css') }}">
+{% endblock %}
 {% block body %}
 	<div class="site-blocks-cover overlay" style="background-image: url({{ asset('front/images/hero_2.jpg') }});" data-aos="fade" data-stellar-background-ratio="0.5">
 		<div class="container">
@@ -21,145 +25,112 @@
 	{# affihage article  #}
 	<div class="site-section bg-light">
 		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-					<iframe style="width:100%" height="438" src="https://www.youtube.com/embed/g6VCpmMsmDM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+			<div class="row justify-content-center mb-3">
+				<div class="col-md-12 text-center border-primary">
+					<h2 class="font-weight-light text-primary">Titre de l'article</h2>
 				</div>
-                <div class="image_article">
-                    <img src="{{ asset('front/images/img_1.jpg') }}" alt="Image" class="img-fluid rounded">
-                </div>
-                <div class="content_article">
-                    <p>
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Commodi dolores quod quo. Eum rerum inventore, iure labore nobis modi quod, 
-                        facere unde aut mollitia minima tempore nesciunt blanditiis placeat quos.
-
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Commodi dolores quod quo. Eum rerum inventore, iure labore nobis modi quod, 
-                        facere unde aut mollitia minima tempore nesciunt blanditiis placeat quos.
-                    </p>
-                </div>
-				<div class="col-md-12">
-					<div class="panel panel-default widget">
-						<div class="panel-heading">
-							<span class="glyphicon glyphicon-comment"></span>
-							<h3 class="panel-title">
-								Recent Comments</h3>
-							<span class="label label-info">
-								78</span>
-						</div>
-						<div class="panel-body">
-							<ul class="list-group">
-								<li class="list-group-item">
-									<div class="row">
-										<div class="col-xs-10 col-md-11">
-											<div>
-												<div class="mic-info">
-													<a href="#">Nom de commentateur</a>
-													<p>le
-														<span>12/04/2021</span>
-													</p>
-												</div>
-											</div>
-											<div class="action">
-												<a href="#" class="btn btn-primary btn-xs" title="Edit">
-													<span class="fa fa-edit"></span>
-												</a>
-												<a href="#" class="btn btn-danger btn-xs" title="Delete">
-													<span class="fa fa-trash"></span>
-												</a>
-												<a href="#" class="btn btn-info btn-xs" title="response">
-													<span class="response">Répondre</span>
-												</a>
-												<div class="liste_response">
-													<ul>
-														<li class="list-group-item">
-															<div class="row">
-																<div class="col-xs-10 col-md-11">
-																	<div>
-																		<div class="mic-info">
-																			<a href="#">Nom de commentateur</a>
-																			<p>le
-																				<span>12/04/2021</span>
-																			</p>
-																		</div>
-																	</div>
-																	<div class="action">
-																		<a href="#" class="btn btn-primary btn-xs" title="Edit">
-																			<span class="fa fa-edit"></span>
-																		</a>
-
-																		<a href="#" class="btn btn-danger btn-xs" title="Delete">
-																			<span class="fa fa-trash"></span>
-																		</a>
-																	</div>
-																</div>
-															</div>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</div>
-								</li>
-								<li class="list-group-item">
-									<div class="row">
-										<div class="col-xs-10 col-md-11">
-											<div>
-												<div class="mic-info">
-													<a href="#">Nom de commentateur</a>
-													<p>le
-														<span>12/04/2021</span>
-													</p>
-												</div>
-											</div>
-											<div class="action">
-												<a href="#" class="btn btn-primary btn-xs" title="Edit">
-													<span class="fa fa-edit"></span>
-												</a>
-												<a href="#" class="btn btn-danger btn-xs" title="Delete">
-													<span class="fa fa-trash"></span>
-												</a>
-												<a href="#" class="btn btn-info btn-xs" title="response">
-													<span class="response">Répondre</span>
-												</a>
-												<div class="liste_response">
-													<ul>
-														<li class="list-group-item">
-															<div class="row">
-																<div class="col-xs-10 col-md-11">
-																	<div>
-																		<div class="mic-info">
-																			<a href="#">Nom de commentateur</a>
-																			<p>le
-																				<span>12/04/2021</span>
-																			</p>
-																		</div>
-																	</div>
-																	<div class="action">
-																		<a href="#" class="btn btn-primary btn-xs" title="Edit">
-																			<span class="fa fa-edit"></span>
-																		</a>
-
-																		<a href="#" class="btn btn-danger btn-xs" title="Delete">
-																			<span class="fa fa-trash"></span>
-																		</a>
-																	</div>
-																</div>
-															</div>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</div>
-								</li>
-							</ul>
-							
+				<div class="video_article mt-4">
+					<video controls>
+						<source src="{{ asset('uploads/article/videos/609ab8abd770a.mp4') }}" type="video/Mp4">
+					</video>
+				</div>
+				<div class="image_article mt-4">
+					<div class="lightbox">
+						<div class="row">
+							<div class="col-lg-6">
+								<img src="https://mdbootstrap.com/img/Photos/Thumbnails/Slides/1.jpg" data-mdb-img="https://mdbootstrap.com/img/Photos/Slides/1.jpg" alt="Lightbox image 1" class="w-100 mb-2 mb-md-4 shadow-1-strong rounded"/>
+								<img src="https://mdbootstrap.com/img/Photos/Thumbnails/Square/1.jpg" data-mdb-img="https://mdbootstrap.com/img/Photos/Square/1.jpg" alt="Lightbox image 2" class="w-100 shadow-1-strong rounded"/>
+							</div>
+							<div class="col-lg-6">
+								<img src="https://mdbootstrap.com/img/Photos/Thumbnails/Vertical/1.jpg" data-mdb-img="https://mdbootstrap.com/img/Photos/Vertical/1.jpg" alt="Lightbox image 3" class="w-100 shadow-1-strong rounded"/>
+							</div>
 						</div>
 					</div>
 
 				</div>
+				<div class="content_article mt-4">
+					<p style="text-align:justify;">
+						Il est difficile d'assigner au concert une date de naissance précise, et l'on a pu considérer que les concerts avaient été inventés à l'époque de Néron. Les spectacles des jongleurs au Moyen Âge, comprenant des interventions instrumentales et vocales, peuvent aussi préfigurer le concert.
+
+						Il semble cependant que le concert ait été créé en Italie à la fin du XVIe siècle, plutôt comme rencontre conviviale entre instrumentistes dans le cadre de réunions prenant un peu la forme de salons.
+
+						Au XVIIe siècle, le concert se répand en Allemagne avec les soirées musicales de Lübeck dans les années 1620, exemple suivi ailleurs en Allemagne et en Suisse. En Angleterre, de nombreux concerts ont vu le jour à partir de 1640 environ, d'abord organisés dans des tavernes, puis dans d'autres types de salles, conduisant au développement de sociétés musicales (dites aussi Collegium musicum). En France, dans la première moitié du XVIIe siècle, des musiciens de renom (souvent des musiciens du Roi) commencent à organiser chez eux des concerts à destination des nobles et des bourgeois : on trouve des exemples de telles pratiques chez les La Barre ou les Sainte-Colombe. Ce sont des concerts domestiques, semi-privés, mais qui préfigurent le développement de cette pratique par la suite.
+
+						Le XVIIIe siècle est celui du développement du concert dans toute l'Europe occidentale. À Paris, le privilège de l'Académie royale de musique limite la possibilité de concerts publics, mais le Concert Spirituel connaît un important succès à partir de 1725. Dans les années 1770, des concerts qualifiés de semi-publics voient le jour : Concert de la Loge Olympique et Concert des Amateurs.
+
+						Dans les autres villes de France, comme à Grenoble, à Lyon, à Nantes ou à Bordeaux, des concerts sont organisés, souvent par des académies ou par des loges maçonniques. Ces sociétés de concerts rassemblent souvent au départ des amateurs et des musiciens professionnels, qui prennent peu à peu le dessus. Les premiers concerts réguliers se développent, complétés par des « concerts à bénéfice » et par des concerts spirituels à l'instar du concert parisien. Le modèle du Concert Spirituel ne se répand pas seulement en province, mais aussi dans d'autres capitales comme Vienne et Moscou. 
+					</p>
+				</div>
+
+				<div class="article_form_comment">
+
+					<form method="post" accept-charset="UTF-8">
+						<div class="form-group">
+							<label for="">Commentaire : </label>
+							<textarea name="" id="input_comment"></textarea>
+						</div>
+						<div class="form-group">
+							<button class="btn btn-primary">Commenter</button>
+						</div>
+					</form>
+				</div>
+
+				<div class="list_comments_article">
+					<div class="card card-white post">
+						<div class="post-heading">
+							<div class="float-left image">
+								<img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar" alt="user profile image">
+							</div>
+
+							<div class="float-left meta">
+								<div class="title h5">
+									<a href="#">
+										<b>Ryan Haywood</b>
+									</a>
+									a commenter il y a environ
+								</div>
+								<h6 class="text-muted time">1 minute</h6>
+							</div>
+							<div class="comment_action">
+								<a href="#" class="btn btn-info btn-sm">Modifier</a>
+								<a href="#" class="btn btn-danger btn-sm">Supprimer</a>
+							</div>
+						</div>
+						<div class="post-description">
+							<p>Bootdey is a gallery of free snippets resources templates and utilities for bootstrap css hmtl js framework. Codes for developers and web designers</p>
+
+						</div>
+					</div>
+				</div>
+
 			</div>
+
 		</div>
 	</div>
 	{# fin aff #}
 {% endblock %}
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+	<script>
+		$('#input_comment').summernote({
+				
+				toolbar: [
+					[ 'style', [ 'style' ] ],
+					[ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
+					[ 'fontname', [ 'fontname' ] ],
+					[ 'fontsize', [ 'fontsize' ] ],
+					[ 'color', [ 'color' ] ],
+					[ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
+					[ 'table', [ 'table' ] ],
+					[ 'insert', [ 'link'] ],
+					[ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview', 'help' ] ]
+				],
+				height: 100,
+            });
+	</script>
+{% endblock %}
+
+
+

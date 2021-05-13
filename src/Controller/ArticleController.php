@@ -5,7 +5,11 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Article;
 use App\Entity\FileUpload;
+use App\Entity\Etablissement;
+use App\Repository\ArticleRepository;
+use App\Repository\EtablissementRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,19 +30,28 @@ class ArticleController extends AbstractController
     }
 
     /**
-     * @Route("/articles", name="articles")
+     * @Route("/profile/articles/{etablissement_id}", name="articles")
     */
-    public function articles(): Response
-    {   
-        $repoArticle = $this->getDoctrine()->getRepository(Article::class);
-        $articles = $repoArticle->findAll();
+    public function articles(ArticleRepository $repoArticle, Request $request, PaginatorInterface $paginator, $etablissement_id, EtablissementRepository $repoEtablissement): Response
+    {
+        $etablissement = $repoEtablissement->find(1);
+        
+        $query = $repoArticle->queryFindAll();
+        //dd($j);
+        $pagination = $paginator->paginate(
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            6 /*limit per page*/
+        );
+
+        //dd($articles);
         return $this->render("front/articles.html.twig", [
-            "articles" => $articles
+            "pagination" => $pagination,
         ]);
     }
 
     /**
-     * @Route("/article/{id}", name="article")
+     * @Route("/profile/article/{id}", name="article")
     */
     public function article(): Response
     {

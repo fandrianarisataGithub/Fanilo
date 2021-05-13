@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Form\ArticleType;
+use App\Entity\Etablissement;
+use App\Repository\EtablissementRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,14 +21,37 @@ class DefaultController extends AbstractController
     {
         $this->em = $em;
     }
+
+    /**
+     * @Route("/profile/{etablissement_id}", name="home_auth")
+     */
+    public function home_auth($etablissement_id):Response
+    {
+        
+        $repoEtablissement = $this->getDoctrine()->getRepository(Etablissement::class);
+        $etablissement = $repoEtablissement->find($etablissement_id);
+        
+        $repoArticle = $this->getDoctrine()->getRepository(Article::class);
+        $articles = $repoArticle->findBy([], ["createdAt" => "DESC"], 6);
+        //dd($articles);
+        $user = $this->getUser();
+        //dd($user);
+        return $this->render("front/home.html.twig", [
+            "articles" => $articles
+        ]);  
+    }
+
     /**
      * @Route("/", name="home")
      */
-    public function first():Response
+    public function home(): Response
     {
-        $user = $this->getUser();
-        //dd($user);
-        return $this->render("front/home.html.twig");  
+        $repoArticle = $this->getDoctrine()->getRepository(Article::class);
+        $articles = $repoArticle->findBy([], ["createdAt" => "DESC"], 6);
+       
+        return $this->render("front/home.html.twig", [
+                "articles" => $articles
+            ]);
     }
 
     

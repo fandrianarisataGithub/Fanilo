@@ -45,6 +45,11 @@ class Article
      */
     private $files;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Etablissement::class, inversedBy="articles")
+     */
+    private $etabissement;
+
     public function __construct()
     {
         $this->files = new ArrayCollection();
@@ -129,6 +134,18 @@ class Article
                 $file->setArticle(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEtabissement(): ?Etablissement
+    {
+        return $this->etabissement;
+    }
+
+    public function setEtabissement(?Etablissement $etabissement): self
+    {
+        $this->etabissement = $etabissement;
 
         return $this;
     }

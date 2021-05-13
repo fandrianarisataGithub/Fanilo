@@ -10,6 +10,15 @@ parameters:
     fichiers_article: '%kernel.project_dir%/public/uploads/article/fichiers'
     videos_article: '%kernel.project_dir%/public/uploads/article/videos'
 services:
+    twig.extension.text:
+        class: Twig_Extensions_Extension_Text
+        tags:
+            - { name: twig.extension }
+
+    twig.extension.date:
+        class: Twig_Extensions_Extension_Date
+        tags:
+            - { name: twig.extension }
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.

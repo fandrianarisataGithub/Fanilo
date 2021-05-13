@@ -97,9 +97,62 @@ input[type="file"] {
 .p_truncate, .p_truncate > p {
     display: block;
     height: 50px;
-    background: red;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
 }
+
+.h-entry img{
+    height: 150px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    box-shadow: 0px 0px 10px rgba(189,189,189,0.8);
+}
+
+h2.font-size-regular a{
+    color: rgba(23,23,24,1) !important;
+}
+
+.p_truncate{
+    padding-left: 15px;
+    border-left: 5px solid rgba(189,189,189,0.5);
+    font-size: 12px !important;
+    color: rgba(23,23,24,1) !important;
+}
+
+/*style comments*/
+.article_form_comment{
+    width: 100%;
+}
+
+.list_comments_article{
+    width: 100%;
+}
+
+.list_comments_article .card{
+    padding: 15px;
+}
+.list_comments_article .post-heading img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.list_comments_article .meta{
+    margin-left: 15px;
+}
+.post-description{
+    padding-left: 75px;
+}
+.post-description p{
+    font-size: 13px;
+}
+
+
+
+
+/* styles comments */
+
+
+

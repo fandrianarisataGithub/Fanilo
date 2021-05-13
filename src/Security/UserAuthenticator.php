@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
@@ -99,8 +100,11 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator implements Passwo
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }// le type no mila reglena, na manampy class vaovao admin
-        //dd($request);
-        return new RedirectResponse($this->urlGenerator->generate('home'));
+        $user = $this->getUser($this->getCredentials($request), $this->userProvider);
+        //dd($user->getEtablissement()->getId());
+        return new RedirectResponse($this->urlGenerator->generate('home_auth', [
+            'etablissement_id' => $user->getEtablissement()->getId()
+        ]));
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
